@@ -6,13 +6,13 @@ import {
   updateUserProfile,
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { parseForm } from "../middlewares/multer.middleware.js"; // 👈 ye add karo
+// import { parseForm } from "../middlewares/multer.middleware.js"; // 👈 ye add karo
 
 const router = Router();
 
 // ✅ Public routes
-router.post("/register", parseForm, registerUser);  // 👈 yaha lagana hoga
-router.post("/login", parseForm, loginUser);        // login me bhi form-data chahiye to lagao
+router.post("/register", registerUser);  // 👈 yaha lagana hoga
+router.post("/login", loginUser);        // login me bhi form-data chahiye to lagao
 
 // ✅ Protected routes
 router.get("/profile", verifyJWT, getUserProfile);

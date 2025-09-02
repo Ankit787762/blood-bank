@@ -19,13 +19,13 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User with this email or username already exists");
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // const hashedPassword = await bcrypt.hash(password, 10);  // already hasing in user.model so no need again hashing here
 
   const user = await User.create({
     fullName,
     email,
     username,
-    password: hashedPassword,
+    password
   });
 
   return res.status(201).json(new ApiResponse(201, user, "User registered successfully"));

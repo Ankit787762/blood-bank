@@ -4,10 +4,11 @@ import { registerUser } from "../services/userService";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  username: "",   // 👈 add
+  fullName: "",
+  email: "",
+  password: "",
+});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -42,13 +43,22 @@ const Register = () => {
 
         <input
           type="text"
-          name="name"
+          name="fullName"
           placeholder="Name"
-          value={formData.name}
+          value={formData.fullName}
           onChange={handleChange}
           required
           className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
         />
+              <input
+              type="text"
+              name="username"
+             placeholder="Username"
+             value={formData.username}
+             onChange={handleChange}
+              required
+                className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200"
+              /> 
 
         <input
           type="email"
