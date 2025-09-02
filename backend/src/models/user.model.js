@@ -46,17 +46,17 @@ const userSchema = new Schema(
         "AB+",
         "AB-",
       ],
-      required: function () {
-        return this.role === "user"; // sirf user/donor ke liye required
-      },
+      // required: function () {
+      //   return this.role === "user"; // sirf user/donor ke liye required
+      // },
     },
     phone: {
       type: String,
-      required: true,
+      // required: true,
     },
     address: {
       type: String,
-      required: true,
+      // required: true,
     },
     refreshToken: {
       type: String,
