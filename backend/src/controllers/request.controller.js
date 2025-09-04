@@ -7,15 +7,15 @@ import { Hospital } from "../models/hospital.model.js";
 
 // ✅ Create new blood request
 const createRequest = asyncHandler(async (req, res) => {
-  const { bloodType, units, hospital } = req.body;
+  const { bloodGroup, units, hospital } = req.body;
 
-  if (!bloodType || !units || !hospital) {
+  if (!bloodGroup || !units || !hospital) {
     throw new ApiError(400, "Blood type, units and hospital are required");
   }
 
   const newRequest = await BloodRequest.create({
-    requester: req.user?._id,
-    bloodType,
+    user: req.user?._id,
+    bloodGroup,
     units,
     hospital,
   });
@@ -28,7 +28,7 @@ const createRequest = asyncHandler(async (req, res) => {
 // ✅ Get all requests
 const getAllRequests = asyncHandler(async (req, res) => {
   const requests = await BloodRequest.find()
-    .populate("requester", "fullName email phone bloodGroup")
+    .populate("user", "fullName email phone bloodGroup")
     .populate("hospital", "name location contact");
 
   return res
@@ -41,7 +41,7 @@ const getRequestById = asyncHandler(async (req, res) => {
   const { requestId } = req.params;
 
   const request = await BloodRequest.findById(requestId)
-    .populate("requester", "fullName email phone bloodGroup")
+    .populate("user", "fullName email phone bloodGroup")
     .populate("hospital", "name location contact");
 
   if (!request) {
@@ -52,6 +52,17 @@ const getRequestById = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, request, "Request details fetched successfully"));
 });
+
+
+const getMyRequests = asyncHandler(async (req, res) => {
+  const requests = await BloodRequest.find({ user: req.user?._id })
+    .populate("hospital", "name location contact");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, requests, "Your requests fetched successfully"));
+});
+
 
 // ✅ Update request status
 const updateRequestStatus = asyncHandler(async (req, res) => {
@@ -98,4 +109,5 @@ export {
   getRequestById,
   updateRequestStatus,
   deleteRequest,
+  getMyRequests, 
 };

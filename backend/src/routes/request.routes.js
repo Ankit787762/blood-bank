@@ -5,6 +5,7 @@ import {
   getRequestById,
   updateRequestStatus,
   deleteRequest,
+  getMyRequests,
 } from "../controllers/request.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -13,6 +14,7 @@ const router = Router();
 // ✅ Request routes
 router.post("/", verifyJWT, createRequest);
 router.get("/", getAllRequests);
+router.get("/my", verifyJWT, getMyRequests);
 router.get("/:requestId", getRequestById);
 router.put("/:requestId", verifyJWT, updateRequestStatus);
 router.delete("/:requestId", verifyJWT, deleteRequest);
