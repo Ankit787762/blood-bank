@@ -24,26 +24,33 @@ const AdminRequests = () => {
 
   // ✅ Approve / Reject handler
   const handleAction = async (id, action) => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.put(
-  `http://localhost:5000/api/v1/admin/requests/${id}`, // ✅ yeh theek hai
-  { status: action },
-  { headers: { Authorization: `Bearer ${token}` } }
-);
+  try {
+    const token = localStorage.getItem("token");
 
+    // Optional: UI turant update karne ke liye (optimistic update)
+    setRequests((prev) =>
+      prev.map((r) => (r._id === id ? { ...r, status: action } : r))
+    );
 
-      // UI update
-      setRequests((prev) =>
-        prev.map((r) =>
-          r._id === id ? { ...r, status: res.data.data.status } : r
-        )
-      );
-    } catch (err) {
-      console.error("❌ Error updating request:", err);
-      alert("Something went wrong while updating request");
-    }
-  };
+    const res = await axios.put(
+      `http://localhost:5000/api/v1/admin/requests/${id}`,
+      { status: action },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // Backend ka response confirm karne ke liye
+    setRequests((prev) =>
+      prev.map((r) =>
+        r._id === id ? { ...r, status: res.data.data.status } : r
+      )
+    );
+
+    console.log("✅ Request updated:", res.data.data);
+  } catch (err) {
+    console.error("❌ Error updating request:", err);
+    alert("Something went wrong while updating request");
+  }
+};
 
   if (loading) return <p>Loading requests...</p>;
 

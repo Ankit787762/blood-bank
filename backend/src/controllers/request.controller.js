@@ -66,32 +66,28 @@ const getMyRequests = asyncHandler(async (req, res) => {
 
 // ✅ Update request status
 const updateRequestStatus = asyncHandler(async (req, res) => {
-  console.log("Update request hit:", req.params, req.body); // 🔍 debug log
-
   const { requestId } = req.params;
   const { status } = req.body;
 
-  if (!["pending", "approved", "rejected", "completed"].includes(status)) {
-    console.error("❌ Invalid status:", status);
-    throw new ApiError(400, "Invalid status value");
+  const updatedRequest = await BloodRequest.findByIdAndUpdate(
+    requestId,
+    { status: status },
+    { new: true } // updated document return kare
+  );
+
+  if (!updatedRequest) {
+    return res.status(404).json({ message: "Request not found" });
   }
 
-  const request = await BloodRequest.findById(requestId);
-
-  if (!request) {
-    console.error("❌ Request not found with id:", requestId);
-    throw new ApiError(404, "Request not found");
-  }
-
-  request.status = status;
-  await request.save();
-
-  console.log("✅ Updated request:", request);
-
-  return res
-    .status(200)
-    .json(new ApiResponse(200, request, "Request status updated successfully"));
+  return res.status(200).json({
+    status: 200,
+    data: updatedRequest,
+    message: "Request status updated successfully",
+  });
 });
+
+
+
 
 
 // ✅ Delete request
