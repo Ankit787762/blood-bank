@@ -31,6 +31,7 @@ const registerUser = asyncHandler(async (req, res) => {
   return res.status(201).json(new ApiResponse(201, user, "User registered successfully"));
 });
 
+
 // ✅ Login user
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -46,21 +47,31 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
-
   if (!isPasswordValid) {
     throw new ApiError(401, "Invalid credentials");
   }
 
+  // 🔹 Token banate time role include kar
   const token = jwt.sign(
     { _id: user._id, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
 
+  // 🔹 Password, refreshToken remove karke safe user bhejna
+  const safeUser = {
+    _id: user._id,
+    fullName: user.fullName,
+    email: user.email,
+    username: user.username,
+    role: user.role,
+  };
+
   return res.status(200).json(
-    new ApiResponse(200, { user, token }, "Login successful")
+    new ApiResponse(200, { user: safeUser, token }, "Login successful")
   );
 });
+
 
 // ✅ Get current user profile
 const getUserProfile = asyncHandler(async (req, res) => {
@@ -118,6 +129,12 @@ const getDonorById = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, donor, "Donor details fetched successfully"));
 });
 
+  // verify user
+ const verifyUser = (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user: req.user }, "Token is valid"));
+};
 // ✅ Export all controllers
 export {
   registerUser,
@@ -125,5 +142,6 @@ export {
   getUserProfile,
   updateUserProfile,
   getAllDonors,
-  getDonorById
+  getDonorById,
+  verifyUser
 };

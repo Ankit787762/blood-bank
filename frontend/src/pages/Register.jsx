@@ -22,8 +22,13 @@ const Register = () => {
     setLoading(true);
     setError("");
     try {
-      await registerUser(formData);
+     const { data } = await registerUser(formData);
+
+    // token aur user details localStorage me save karo
+    localStorage.setItem("token", data.data.token);
+    localStorage.setItem("user", JSON.stringify(data.data.user)); 
       alert("✅ Registration successful! Please login.");
+
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "user already exist");

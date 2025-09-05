@@ -4,6 +4,7 @@ import {
   loginUser,
   getUserProfile,
   updateUserProfile,
+  verifyUser,
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 // import { parseForm } from "../middlewares/multer.middleware.js"; // 👈 ye add karo
@@ -17,5 +18,11 @@ router.post("/login", loginUser);        // login me bhi form-data chahiye to la
 // ✅ Protected routes
 router.get("/profile", verifyJWT, getUserProfile);
 router.put("/profile", verifyJWT, updateUserProfile);
+
+
+
+// ✅ Verify route
+router.get("/verify", verifyJWT, verifyUser);
+
 
 export default router;

@@ -1,17 +1,27 @@
-import { BrowserRouter } from "react-router-dom";
-import Navbar from "./components/Navbar";
+// src/App.jsx
+import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
+import Navbar from "./components/Navbar";
+
+function LayoutWrapper() {
+  const location = useLocation();
+
+  // ✅ Admin ke liye Navbar hide
+  const isAdminPath = location.pathname.startsWith("/admin-dashboard");
+
+  return (
+    <>
+      {!isAdminPath && <Navbar />} {/* Admin pages pe hide */}
+      <AppRoutes />
+    </>
+  );
+}
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <main className="p-6">
-          <AppRoutes />
-        </main>
-      </div>
-    </BrowserRouter>
+    <Router>
+      <LayoutWrapper />
+    </Router>
   );
 }
 
