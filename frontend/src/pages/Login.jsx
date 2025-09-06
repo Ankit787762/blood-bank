@@ -40,9 +40,9 @@ const Login = () => {
 
       // ✅ Redirect based on role
       if (decoded.role === "admin") {
-        navigate("/admin-dashboard");
+        navigate("/admin-dashboard"); // admin dashboard
       } else {
-        navigate("/dashboard");
+        navigate("/dashboard"); // user dashboard
       }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");

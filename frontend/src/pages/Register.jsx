@@ -29,7 +29,7 @@ const Register = () => {
     localStorage.setItem("user", JSON.stringify(data.data.user)); 
       alert("✅ Registration successful! Please login.");
 
-      navigate("/dashboard");
+      navigate("/login");
     } catch (err) {
       setError(err.response?.data?.message || "user already exist");
     } finally {

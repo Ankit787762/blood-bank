@@ -1,26 +1,40 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { Home, Hospital, List } from "lucide-react";
 
-const Sidebar = () => {
-  const linkClass = ({ isActive }) =>
-    `block p-4 hover:bg-gray-200 ${isActive ? "bg-gray-300 font-bold" : ""}`;
+export default function Sidebar() {
+  const location = useLocation();
+
+  const navItems = [
+   { path: "/admin-dashboard", label: "Dashboard", icon: <Home size={18} /> },
+  { path: "/admin-dashboard/hospitals", label: "Hospitals", icon: <Hospital size={18} /> },
+  { path: "/admin-dashboard/requests", label: "Requests", icon: <List size={18} /> },
+  ];
 
   return (
-    <aside className="w-60 bg-gray-100 h-full shadow-lg">
-      <h2 className="text-xl font-bold p-4">Admin Panel</h2>
-      <nav className="flex flex-col">
-        <NavLink to="/admin-dashboard" end className={linkClass}>
-          Dashboard
-        </NavLink>
-        <NavLink to="/admin-dashboard/hospitals" className={linkClass}>
-          Hospitals
-        </NavLink>
-        <NavLink to="/admin-dashboard/requests" className={linkClass}>
-          Requests
-        </NavLink>
+    <aside className="w-64 bg-white shadow-lg flex flex-col">
+      <div className="p-6 font-bold text-xl border-b">🩸 Admin Panel</div>
+      <nav className="flex-1 p-4 space-y-2">
+        {navItems.map((item) => (
+         <Link
+  key={item.path}
+  to={item.path}
+  className={`flex items-center gap-2 p-3 rounded-md transition ${
+    item.path === "/admin-dashboard"
+      ? location.pathname === item.path
+        ? "bg-blue-600 text-white"
+        : "hover:bg-gray-200 text-gray-700"
+      : location.pathname.includes(item.path)
+      ? "bg-blue-600 text-white"
+      : "hover:bg-gray-200 text-gray-700"
+  }`}
+>
+  {item.icon} {/* ✅ Icon render */}
+  {item.label}
+</Link>
+
+
+        ))}
       </nav>
     </aside>
   );
-};
-
-export default Sidebar;
+}

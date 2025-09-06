@@ -6,12 +6,12 @@ import Navbar from "./components/Navbar";
 function LayoutWrapper() {
   const location = useLocation();
 
-  // ✅ Admin ke liye Navbar hide
-  const isAdminPath = location.pathname.startsWith("/admin-dashboard");
+  // ✅ Navbar sirf login aur register pages ke liye
+  const showNavbar = location.pathname === "/" || location.pathname === "/login" || location.pathname === "/register";
 
   return (
     <>
-      {!isAdminPath && <Navbar />} {/* Admin pages pe hide */}
+      {showNavbar && <Navbar />}
       <AppRoutes />
     </>
   );

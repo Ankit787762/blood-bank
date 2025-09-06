@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getHospitals } from "../services/hospitalService";
+import { getHospitals } from "../../services/hospitalService";
 
 const Hospitals = () => {
   const [hospitals, setHospitals] = useState([]);

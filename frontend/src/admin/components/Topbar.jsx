@@ -1,31 +1,28 @@
-import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/authSlice";
 import { useNavigate } from "react-router-dom";
+import { LogOut} from "lucide-react";
 
-const Topbar = () => {
+export default function Topbar() { // same export name
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
- const handleLogout = () => {
-  localStorage.removeItem("token"); // ✅ token bhi hatao
-  dispatch(logout());               // ✅ redux state clear
-  navigate("/");                    // ✅ Home page redirect
-};
-
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(logout());
+    navigate("/");
+  };
 
   return (
-    <header className="flex justify-between items-center bg-white shadow p-4">
+    <header className="bg-white shadow p-4 flex justify-between items-center">
       <h1 className="text-xl font-bold">Welcome, {user?.username}</h1>
       <button
         onClick={handleLogout}
-        className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+        className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
       >
-        Logout
+      <LogOut size={18} /> Logout
       </button>
     </header>
   );
-};
-
-export default Topbar;
+}
